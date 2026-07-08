@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Johnson — Frontend & Firebase Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ece6d6;
+    --paper-deep: #e2dac5;
+    --line: #cdc2a3;
+    --ink: #262a33;
+    --ink-soft: #5b5f6b;
+    --stamp-red: #9c3b3b;
+    --ledger-green: #3f6b4f;
+    --brass: #a8843c;
+    --shadow: rgba(38,42,51,0.12);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--paper-deep) 1px, transparent 1px);
+    background-size: 100% 2.1rem;
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  .type{ font-family:'Special Elite', monospace; }
+
+  .sheet{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  /* perforated top edge */
+  .perf-top{
+    height: 22px;
+    background:
+      radial-gradient(circle at 12px 0, transparent 10px, var(--paper) 11px) repeat-x;
+    background-size: 24px 22px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .divider{
+    border: none;
+    border-top: 2px dashed var(--line);
+    margin: 2.75rem 0;
+    position: relative;
+  }
+  .divider::before{
+    content: "✂";
+    position: absolute;
+    left: -8px;
+    top: -12px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    background: var(--paper);
+    padding: 0 4px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    padding-top: 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .receipt-no{
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  h1.name{
+    font-family:'Special Elite', monospace;
+    font-size: clamp(2.1rem, 6vw, 3rem);
+    letter-spacing: 0.04em;
+    margin: 0.6rem 0 0.3rem;
+    text-transform: uppercase;
+  }
+
+  .role{
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    margin: 0 0 1rem;
+  }
+
+  .meta-row{
+    display:flex;
+    justify-content:center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+  }
+
+  .stamp{
+    display:inline-block;
+    margin: 1.6rem auto 0;
+    border: 3px solid var(--stamp-red);
+    color: var(--stamp-red);
+    font-family:'Special Elite', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 1.1rem;
+    border-radius: 6px;
+    transform: rotate(-4deg);
+    opacity: 0.9;
+    animation: stamp-in 0.5s ease-out;
+  }
+  @keyframes stamp-in{
+    from{ opacity:0; transform: rotate(-4deg) scale(1.4); }
+    to{ opacity:0.9; transform: rotate(-4deg) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stamp{ animation: none; }
+  }
+
+  /* ---------- SECTION LABELS ---------- */
+  .section-label{
+    font-family:'Special Elite', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 1.1rem;
+    display:flex;
+    align-items:center;
+    gap: 0.6rem;
+  }
+  .section-label::after{
+    content:"";
+    flex:1;
+    border-top: 1px solid var(--line);
+  }
+
+  p.lede{
+    font-size: 1.05rem;
+    color: var(--ink);
+    max-width: 58ch;
+  }
+
+  /* ---------- SKILLS LEDGER ---------- */
+  .skills-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+  .skills-table td{
+    padding: 0.55rem 0.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .skills-table td.check{
+    color: var(--ledger-green);
+    width: 1.6rem;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .skills-table td.qty{
+    text-align:right;
+    color: var(--ink-soft);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  /* ---------- PROJECT LEDGER ---------- */
+  .entry{
+    padding: 1.4rem 0;
+    border-bottom: 1px dotted var(--line);
+    transition: transform 0.15s ease;
+  }
+  .entry:hover{ transform: translateX(3px); }
+
+  .entry-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .entry-title{
+    font-family:'Special Elite', monospace;
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .entry-id{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+  }
+
+  .entry-desc{
+    margin: 0.5rem 0 0.8rem;
+    color: var(--ink);
+    font-size: 0.98rem;
+    max-width: 60ch;
+  }
+
+  .tags{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.9rem;
+  }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .stubs{
+    display:flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .stub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .stub:hover{ color: var(--stamp-red); border-color: var(--stamp-red); }
+  .stub:focus-visible{ outline: 2px solid var(--stamp-red); outline-offset: 3px; }
+
+  /* ---------- TOTAL LINE ---------- */
+  .total-box{
+    margin-top: 1rem;
+    padding: 1.1rem 1.2rem;
+    border: 2px solid var(--ink);
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .total-box .label{ letter-spacing:0.08em; font-size:0.8rem; color: var(--ink-soft); }
+  .total-box .value{ font-size:1.2rem; font-weight:600; color: var(--ledger-green); }
+
+  /* ---------- CONTACT / REMIT ---------- */
+  .remit{
+    border: 1px solid var(--ink);
+    padding: 1.4rem;
+    position: relative;
+  }
+  .remit::before{
+    content: "REMIT TO";
+    position: absolute;
+    top: -0.65rem;
+    left: 1rem;
+    background: var(--paper);
+    padding: 0 0.5rem;
+    font-family:'Special Elite', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+  .remit-row{
+    display:flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px dotted var(--line);
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .remit-row:last-child{ border-bottom:none; }
+  .remit-row .k{ color: var(--ink-soft); font-family:'IBM Plex Mono', monospace; font-size:0.8rem; letter-spacing:0.04em; }
+  .remit-row a{ color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .remit-row a:hover{ color: var(--stamp-red); border-color: var(--stamp-red); }
+
+  footer{
+    text-align:center;
+    margin-top: 3rem;
+    color: var(--ink-soft);
+    font-size: 0.75rem;
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .barcode{
+    display:flex;
+    justify-content:center;
+    gap:2px;
+    margin: 1.2rem 0 0.6rem;
+    height: 34px;
+    align-items: flex-end;
+  }
+  .barcode span{
+    width: 2px;
+    background: var(--ink);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 480px){
+    .entry-head{ flex-direction: column; align-items: flex-start; }
+    .total-box{ flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="perf-top" aria-hidden="true"></div>
+
+<div class="sheet">
+
+  <header>
+    <div class="receipt-no mono">Portfolio Receipt No. 0001 — Issued 2026</div>
+    <h1 class="name">Johnson</h1>
+    <p class="role">Frontend Developer · Firebase-Backed Business Systems</p>
+    <div class="meta-row mono">
+      <span>Available Worldwide</span>
+      <span>·</span>
+      <span>Remote</span>
+      <span>·</span>
+      <span>github.com/JohnsonDev85</span>
+    </div>
+    <div class="stamp">AVAILABLE FOR HIRE</div>
+  </header>
+
+  <hr class="divider">
+
+  <section aria-labelledby="about-label">
+    <div class="section-label" id="about-label">Description</div>
+    <p class="lede">
+      I build practical web systems for businesses that need more than a static site —
+      sales tracking, staff payments, and role-based dashboards that people rely on
+      every day. My work runs on Firebase and Firestore, ships with clean responsive
+      interfaces, and gets deployed the same way it's built: carefully, and one commit
+      at a time.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <section aria-labelledby="skills-label">
+    <div class="section-label" id="skills-label">Items — Skills Rendered</div>
+    <table class="skills-table">
+      <tbody>
+        <tr><td class="check mono">✓</td><td>HTML5 &amp; Semantic Markup</td><td class="qty">01</td></tr>
+        <tr><td class="check mono">✓</td><td>CSS3 — Flexbox, Grid, Responsive Layout</td><td class="qty">02</td></tr>
+        <tr><td class="check mono">✓</td><td>JavaScript (ES6+)</td><td class="qty">03</td></tr>
+        <tr><td class="check mono">✓</td><td>Firebase &amp; Firestore</td><td class="qty">04</td></tr>
+        <tr><td class="check mono">✓</td><td>Cloudinary Media Uploads</td><td class="qty">05</td></tr>
+        <tr><td class="check mono">✓</td><td>PDF &amp; Excel Export (jsPDF)</td><td class="qty">06</td></tr>
+        <tr><td class="check mono">✓</td><td>GitHub Actions Deployment</td><td class="qty">07</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <section aria-labelledby="projects-label">
+    <div class="section-label" id="projects-label">Project Ledger</div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3 class="entry-title">Cement Sales Management System</h3>
+        <span class="entry-id mono">SKU-001</span>
+      </div>
+      <p class="entry-desc">
+        A Firebase-backed system that tracks daily cement sales, calculates
+        tiered staff bonuses automatically, and stores receipt photos through
+        Cloudinary. Deploys hands-free with GitHub Actions.
+      </p>
+      <div class="tags">
+        <span class="tag">Firebase</span>
+        <span class="tag">Firestore</span>
+        <span class="tag">Cloudinary</span>
+        <span class="tag">GitHub Actions</span>
+      </div>
+      <div class="stubs">
+        <a class="stub" href="https://github.com/JohnsonDev85/rose-cement" target="_blank" rel="noopener">View Code →</a>
+        <a class="stub" href="https://johnsondev85.github.io/rose-cement/" target="_blank" rel="noopener">Live Demo →</a>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3 class="entry-title">School Operations Management System</h3>
+        <span class="entry-id mono">SKU-002</span>
+      </div>
+      <p class="entry-desc">
+        A multi-role dashboard system with five distinct user roles, each
+        themed to its own workflow. Tracks income across several departments,
+        records individual hostel payments, and generates PDF statements on
+        demand.
+      </p>
+      <div class="tags">
+        <span class="tag">Firebase</span>
+        <span class="tag">Firestore</span>
+        <span class="tag">jsPDF</span>
+        <span class="tag">Role-Based Access</span>
+      </div>
+      <div class="stubs">
+        <a class="stub" href="https://github.com/JohnsonDev85/kidegembyess.mgt" target="_blank" rel="noopener">View Code →</a>
+        <a class="stub" href="https://johnsondev85.github.io/kidegembyess.mgt/" target="_blank" rel="noopener">Live Demo →</a>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3 class="entry-title">Tuition Program Manager</h3>
+        <span class="entry-id mono">SKU-003</span>
+      </div>
+      <p class="entry-desc">
+        A lightweight program-management tool built for two roles — coordinator
+        and accountant — with local data persistence, a login system, and
+        one-click export to PDF and Excel.
+      </p>
+      <div class="tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">localStorage</span>
+        <span class="tag">PDF Export</span>
+        <span class="tag">Excel Export</span>
+      </div>
+      <div class="stubs">
+        <a class="stub" href="https://johnsondev85.github.io/kidegembye-e-commerce/" target="_blank" rel="noopener">View Code →</a>
+        <a class="stub" href="https://johnsondev85.github.io/kidegembye-e-commerce/" target="_blank" rel="noopener">Live Demo →</a>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <span class="label">TOTAL SYSTEMS SHIPPED</span>
+      <span class="value">3</span>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section aria-labelledby="contact-label">
+    <div class="section-label" id="contact-label">Payment Details</div>
+    <div class="remit">
+      <div class="remit-row">
+        <span class="k">EMAIL</span>
+        <a href="mailto:href="jyona0607@gmail.com">jyona0607@gmail.com</a>
+      </div>
+      <div class="remit-row">
+        <span class="k">UPWORK</span>
+        <a href="https://www.upwork.com/freelancers/~015ac7359c13616778?viewMode=1" target="_blank" rel="noopener">upwork.com/freelancers/~yourprofile</a>
+      </div>
+      <div class="remit-row">
+        <span class="k">GITHUB</span>
+        <a href="https://github.com/JohnsonDev85" target="_blank" rel="noopener">github.com/JohnsonDev85</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="barcode" id="barcode" aria-hidden="true"></div>
+    Thank you for viewing this receipt. Retain for your records.
+  </footer>
+
+</div>
+
+<script>
+  // decorative barcode — purely visual, seeded once
+  const bc = document.getElementById('barcode');
+  const widths = [2,4,2,6,2,3,8,2,4,2,2,6,3,2,4,8,2,3,2,6,4,2,3,2];
+  widths.forEach(w=>{
+    const bar = document.createElement('span');
+    bar.style.width = w + 'px';
+    bar.style.height = (18 + Math.random()*16) + 'px';
+    bc.appendChild(bar);
+  });
+</script>
+
+</body>
+</html>
